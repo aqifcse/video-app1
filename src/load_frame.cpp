@@ -5,6 +5,9 @@ extern "C" {
 #include <inttypes.h>
 }
 
+#undef av_err2str
+#define av_err2str(errnum) 
+
 bool load_frame ( const char* filename, int* width_out, int* height_out, unsigned char** data_out ) {
     // Open the file using libavformat
 	AVFormatContext* av_format_ctx = avformat_alloc_context();
@@ -80,7 +83,8 @@ bool load_frame ( const char* filename, int* width_out, int* height_out, unsigne
 	
 		response = avcodec_send_packet ( av_codec_ctx, av_packet );
 		if ( response < 0 ) {
-			printf( "Failed to decode packet: %s\n", av_err2str ( response ) );
+			auto errstr = av_err2str ( response );
+			printf( "Failed to decode packet: %s\n", av_err2str ( *errstr ) );
 			return false;
 		}
 
@@ -88,7 +92,8 @@ bool load_frame ( const char* filename, int* width_out, int* height_out, unsigne
 		if ( response == AVERROR ( EAGAIN ) || response == AVERROR_EOF ) {
 			continue;
 		} else if ( response < 0 ) {
-			printf( "Failed to decode packet: %s\n", av_err2str ( response ) );
+			auto errstr = av_err2str ( response );
+			printf( "Failed to decode packet: %s\n", av_err2str ( *errstr ) );
 			return false;
 		}
 
@@ -100,9 +105,9 @@ bool load_frame ( const char* filename, int* width_out, int* height_out, unsigne
 	unsigned char* data = new unsigned char [ av_frame -> width * av_frame -> height * 3 ];
 	for ( int x = 0; x < av_frame -> width; ++x ) {
 		for ( int y = 0; y < av_frame -> height; ++y ) {
-			data [ y * av_frame -> width * 3     ] = 0xff;
-		    data [ y * av_frame -> width * 3 + 1 ] = 0x00;
-		    data [ y * av_frame -> width * 3 + 2 ] = 0x00; 
+			data [ y * av_frame -> width * 3 + x * 3     ] = 0xff;
+		    data [ y * av_frame -> width * 3 + x * 3 + 1 ] = 0x00;
+		    data [ y * av_frame -> width * 3 + x * 3 + 2 ] = 0x00; 
  
 		}
 	}

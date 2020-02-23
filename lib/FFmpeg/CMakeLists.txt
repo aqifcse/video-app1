@@ -4,6 +4,7 @@ project ( FFmpeg )
 find_package ( PkgConfig REQUIRED )
 pkg_check_modules ( AVCODEC          REQUIRED IMPORTED_TARGET libavcodec )
 pkg_check_modules ( AVFORMAT         REQUIRED IMPORTED_TARGET libavformat )
+pkg_check_modules ( AVFILTER         REQUIRED IMPORTED_TARGET libavfilter )
 pkg_check_modules ( AVDEVICE         REQUIRED IMPORTED_TARGET libavdevice )
 pkg_check_modules ( AVUTIL           REQUIRED IMPORTED_TARGET libavutil )
 pkg_check_modules ( SWRESSAMPLE      REQUIRED IMPORTED_TARGET libswresample )
@@ -15,6 +16,7 @@ target_include_directories ( FFmpeg INTERFACE
 	${AVFORMAT_INCLUDE_DIRS}
 	${AVFILTER_INCLUDE_DIRS}
 	${AVDEVICE_INCLUDE_DIRS}
+	${AVUTIL_INCLUDE_DIRS}
 	${SWRESSAMPLE_INCLUDE_DIRS}
 	${SWSCALE_INCLUDE_DIRS}
 )
@@ -24,6 +26,7 @@ target_link_options ( FFmpeg INTERFACE
 	${AVFORMAT_LDFLAGS}
 	${AVFILTER_LDFLAGS}
 	${AVDEVICE_LDFLAGS}
+	${AVUTIL_LDFLAGS}
 	${SWRESSAMPLE_LDFLAGS}
 	${SWSCALE_LDFLAGS}
 )
