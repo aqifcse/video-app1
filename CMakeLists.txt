@@ -15,5 +15,10 @@ else ()
 	list (APPEND EXTRA_LIBS "-lGL -lGLU -lX11")
 endif()
 
-add_executable(video-app1 src/main.cpp)
+list ( APPEND SOURCES
+	src/main.cpp
+	src/load_frame.cpp
+)
+
+add_executable ( video-app1 ${SOURCES} )
 target_link_libraries(video-app1 FFmpeg glfw ${EXTRA_LIBS})

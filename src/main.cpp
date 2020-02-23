@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h> // Adding libraries for glfw 
 
+bool load_frame ( const char* filename, int* width, int* height, unsigned char** data );
+
 int main ( int argc, const char** argv ) {
 
 	GLFWwindow* window; // Create a window
@@ -26,32 +28,16 @@ int main ( int argc, const char** argv ) {
 	// We need to make the window stay, so we will use runloop
 
 	//--------------runloop--------------------------------------
-	// Declare a buffer data for glDrawPixel()
-	unsigned char* data = new unsigned char [ 100 * 100 * 3 ]; // buffer data should be 100 by 100 and each pixel has 3 bytes - Red, Green and Blue
-	// fill that with red
-	for ( int y = 0; y < 100; ++y ) {
-    	for ( int x = 0; x < 100; ++x ) {
-    		// fill the buffer with RGB
-    		data [ y * 100 * 3 + x * 3     ] = 0xff; // 255 red
-    		data [ y * 100 * 3 + x * 3 + 1 ] = 0x00; // 0 green
-    		data [ y * 100 * 3 + x * 3 + 2 ] = 0x00; // 0 blue 
-    	}
-	}
-
-	for ( int y = 25; y < 75; ++y ) {
-    	for ( int x = 25; x < 75; ++x ) {
-    		// fill the buffer with RGB
-    		data [ y * 100 * 3 + x * 3     ] = 0x00; // 0 red
-    		data [ y * 100 * 3 + x * 3 + 1 ] = 0x00; // 0 green
-    		data [ y * 100 * 3 + x * 3 + 2 ] = 0xff; // 255 blue 
-    	}
+	int frame_width, frame_height;
+	unsigned char* frame_data;
+	if ( !load_frame ( "/home/pc/vegeta.mp4", &frame_width, &frame_height, &frame_data )) {
+		printf ( "Couldn't load video frame\n" );
+		return 1;
 	}
 
 	glfwMakeContextCurrent ( window ); // The window that is open, thats the window I am operating right now in this Thread
 
 	GLuint tex_handle;
-	int tex_width = 100;
-	int tex_height = 100;
 	glGenTextures ( 1, &tex_handle );
 	glBindTexture ( GL_TEXTURE_2D, tex_handle );
 	glPixelStorei ( GL_UNPACK_ALIGNMENT, 1 );
@@ -60,7 +46,7 @@ int main ( int argc, const char** argv ) {
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexEnvf ( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, frame_width, frame_height, 0, GL_RGB, GL_UNSIGNED_BYTE, frame_data );
 
 	while ( !glfwWindowShouldClose( window ) ) { //As long as the window should not close, do nothing or glfwWaitEvents ()
 		//------------------rendering-----------------------------------------
@@ -80,9 +66,9 @@ int main ( int argc, const char** argv ) {
         glBindTexture ( GL_TEXTURE_2D, tex_handle );
         glBegin ( GL_QUADS );
         	glTexCoord2d ( 0, 0 ); glVertex2i ( 200, 200 );
-        	glTexCoord2d ( 1, 0 ); glVertex2i ( 200 + tex_width * 2, 200 );
-        	glTexCoord2d ( 1, 1 ); glVertex2i ( 200 + tex_width * 2, 200 + tex_height * 2 );
-        	glTexCoord2d ( 0, 1 ); glVertex2i  ( 200, 200 + tex_height * 2 );
+        	glTexCoord2d ( 1, 0 ); glVertex2i ( 200 + frame_width, 200 );
+        	glTexCoord2d ( 1, 1 ); glVertex2i ( 200 + frame_width, 200 + frame_height );
+        	glTexCoord2d ( 0, 1 ); glVertex2i ( 200, 200 + frame_height );
         glEnd ();
         glDisable ( GL_TEXTURE_2D );
 
