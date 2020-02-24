@@ -1,7 +1,6 @@
 /*****************************************************************
 * Author   : Syed Towfiqur Rahim ( Aqif )
-* Topic    : GLFW and FFMP Basics
-* Date     : 18th February, 2020
+* Topic    : GLFW and FFMPEG Basics
 * Turorial : https://www.youtube.com/watch?v=MEMzo59CPr8
 ******************************************************************/
 #include <stdio.h>
@@ -14,15 +13,19 @@ int main ( int argc, const char** argv ) {
 	GLFWwindow* window; // Create a window
 
 	if ( !glfwInit() ) {   // If the window is not initialized, send an echo
+		
 		printf ( "Couldn't init GLFW\n" );
 		return 1;
+	
 	}
 
-	window = glfwCreateWindow ( 640, 480, "Hello TiCON", NULL, NULL ); // this creates a 640 by 480 windowed mode window, if it fails it will return a NULL value. follow - https://www.glfw.org/docs/latest/window_guide.html
+	window = glfwCreateWindow ( 640, 480, "Hello FFMPEG", NULL, NULL ); // this creates a 640 by 480 windowed mode window, if it fails it will return a NULL value. follow - https://www.glfw.org/docs/latest/window_guide.html
 
 	if( !window ) { // If we can't open up a window, send an echo
+		
 		printf ( "Couldn't open window\n" );
 		return 1;
+	
 	}
 
 	// We need to make the window stay, so we will use runloop
@@ -30,25 +33,30 @@ int main ( int argc, const char** argv ) {
 	//--------------runloop--------------------------------------
 	int frame_width, frame_height;
 	unsigned char* frame_data;
-	if ( !load_frame ( "/home/pc/vegeta.mp4", &frame_width, &frame_height, &frame_data )) {
+	
+	if ( !load_frame ( "/home/pc/dogs.mp4", &frame_width, &frame_height, &frame_data )) {
+		
 		printf ( "Couldn't load video frame\n" );
 		return 1;
+	
 	}
 
 	glfwMakeContextCurrent ( window ); // The window that is open, thats the window I am operating right now in this Thread
 
 	GLuint tex_handle;
-	glGenTextures ( 1, &tex_handle );
-	glBindTexture ( GL_TEXTURE_2D, tex_handle );
-	glPixelStorei ( GL_UNPACK_ALIGNMENT, 1 );
+
+	glGenTextures   ( 1, &tex_handle );
+	glBindTexture   ( GL_TEXTURE_2D, tex_handle );
+	glPixelStorei   ( GL_UNPACK_ALIGNMENT, 1 );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	glTexEnvf ( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, frame_width, frame_height, 0, GL_RGB, GL_UNSIGNED_BYTE, frame_data );
+	glTexEnvf       ( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+	glTexImage2D    ( GL_TEXTURE_2D, 0, GL_RGB, frame_width, frame_height, 0, GL_RGB, GL_UNSIGNED_BYTE, frame_data );
 
 	while ( !glfwWindowShouldClose( window ) ) { //As long as the window should not close, do nothing or glfwWaitEvents ()
+		
 		//------------------rendering-----------------------------------------
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         
@@ -75,8 +83,8 @@ int main ( int argc, const char** argv ) {
         glfwSwapBuffers ( window ); // There are two buffers - back buffer and front buffer. The writing goes to back buffer. If there is no swap, the back wont show the new writing. Thats why need to swap back to front.
 		//-------------------rendering-----------------------------------------
 		glfwWaitEvents(); //Staying in a while loop, waiting for events from the user as long as the window should not close 
+	
 	}
-
 	//---------------runloop-------------------------------------
 
 	return 0;

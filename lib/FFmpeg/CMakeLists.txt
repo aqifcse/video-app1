@@ -7,7 +7,7 @@ pkg_check_modules ( AVFORMAT         REQUIRED IMPORTED_TARGET libavformat )
 pkg_check_modules ( AVFILTER         REQUIRED IMPORTED_TARGET libavfilter )
 pkg_check_modules ( AVDEVICE         REQUIRED IMPORTED_TARGET libavdevice )
 pkg_check_modules ( AVUTIL           REQUIRED IMPORTED_TARGET libavutil )
-pkg_check_modules ( SWRESSAMPLE      REQUIRED IMPORTED_TARGET libswresample )
+pkg_check_modules ( SWRESAMPLE       REQUIRED IMPORTED_TARGET libswresample )
 pkg_check_modules ( SWSCALE          REQUIRED IMPORTED_TARGET libswscale )
 
 add_library ( FFmpeg INTERFACE IMPORTED GLOBAL )
@@ -17,7 +17,7 @@ target_include_directories ( FFmpeg INTERFACE
 	${AVFILTER_INCLUDE_DIRS}
 	${AVDEVICE_INCLUDE_DIRS}
 	${AVUTIL_INCLUDE_DIRS}
-	${SWRESSAMPLE_INCLUDE_DIRS}
+	${SWRESAMPLE_INCLUDE_DIRS}
 	${SWSCALE_INCLUDE_DIRS}
 )
 
@@ -27,6 +27,6 @@ target_link_options ( FFmpeg INTERFACE
 	${AVFILTER_LDFLAGS}
 	${AVDEVICE_LDFLAGS}
 	${AVUTIL_LDFLAGS}
-	${SWRESSAMPLE_LDFLAGS}
+	${SWRESAMPLE_LDFLAGS}
 	${SWSCALE_LDFLAGS}
 )

@@ -1,0 +1,1 @@
+/usr/bin/c++    -lavcodec -lavformat -lavfilter -lavdevice -lavutil -lswresample -lswscale CMakeFiles/video-app1.dir/src/main.cpp.o CMakeFiles/video-app1.dir/src/load_frame.cpp.o  -o video-app1  lib/glfw/src/libglfw3.a -lavformat -lavcodec -lswscale -lavutil -lz -lGL -lGLU -lX11 -lpthread /usr/lib/x86_64-linux-gnu/librt.so -lm -ldl 
